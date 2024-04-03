@@ -90,7 +90,9 @@ def main():
             [session["userid"]],
         )
         accounts = cursor.fetchall()
-        return render_template("main.html", accounts=accounts)
+        return render_template(
+            "main.html", accounts=accounts, username=session["username"]
+        )
     return render_template("login.html")
 
 
@@ -129,8 +131,9 @@ def moneyTransferProcess():
 
     if fromAccount is None:
         return render_template(
-            "error.html",
+            "message.html",
             message="There is no account associated with that ID. Please go back and try again with a valid account ID that belongs to you.",
+            isPositive=False,
         )
 
     cursor.execute(
@@ -140,14 +143,16 @@ def moneyTransferProcess():
     toAccount = cursor.fetchone()
     if toAccount is None:
         return render_template(
-            "error.html",
+            "message.html",
             message="There is no account associated with that ID. Please go back and try again with a valid account ID.",
+            isPositive=False,
         )
 
     if fromAccount["balance"] < amount:
         return render_template(
-            "error.html",
+            "message.html",
             message="You do not have enough balance to make this transfer. Please go back and try again with a lower amount.",
+            isPositive=False,
         )
 
     cursor.execute(
@@ -158,7 +163,12 @@ def moneyTransferProcess():
     )
     mysql.connection.commit()
 
-    return redirect(url_for("moneyTransfer"))
+    return render_template(
+        "message.html",
+        message="You have successfully transferred $ %s from account %s to account %s."
+        % (amount, fromAid, toAid),
+        isPositive=True,
+    )
 
 
 @app.route("/closeAccount/<aid>", methods=["GET", "POST"])

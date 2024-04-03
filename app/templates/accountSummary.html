@@ -4,90 +4,159 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
   <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-pzjw8f+ua6rlWWOj3qFhPSc1n6K/KJQ8e5+Xn3xuJwJlSAwiGgFAW/dAiS6JXm"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
     crossorigin="anonymous"
   />
   <head>
-    <title>Results</title>
+    <title>Account Summary</title>
   </head>
-  <body>
-    <div class="container">
-      <form action="{{ url_for('logout') }}">
-        <button class="btn-primary">Log Out</button>
-      </form>
-      <h1>Results</h1>
+  <body
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 2vh;
+    "
+  >
+    <h1>Account Summary</h1>
 
-      <div class="query">
-        <h2>Query 1</h2>
-        <table>
-          <tr>
-            <th>Account ID</th>
-            <th>Branch</th>
-            <th>Balance</th>
-            <th>Opening Date</th>
-          </tr>
-          {% for row in dateOrderQuery %}
-          <tr>
-            <td>{{ row['aid'] }}</td>
-            <td>{{ row['branch'] }}</td>
-            <td>{{ row['balance'] }}</td>
-            <td>{{ row['openDate'] }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
-
-      <div class="query">
-        <h2>Query 2</h2>
-        <table>
-          <tr>
-            <th>Account ID</th>
-            <th>Balance</th>
-            <th>Opening Date</th>
-          </tr>
-          {% for row in dateAfterHighBalanceQuery %}
-          <tr>
-            <td>{{ row['aid'] }}</td>
-            <td>{{ row['balance'] }}</td>
-            <td>{{ row['openDate'] }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
-
-      <div class="query">
-        <h2>Query 3</h2>
-        <table>
-          <tr>
-            <th>Account ID</th>
-            <th>Balance</th>
-          </tr>
-          {% for row in sameCityQuery %}
-          <tr>
-            <td>{{ row['aid'] }}</td>
-            <td>{{ row['balance'] }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
-
-      <div class="query">
-        <h2>Query 4</h2>
-        <table>
-          <tr>
-            <th>Max Balance</th>
-            <th>Min Balance</th>
-          </tr>
-          {% for row in minMaxQuery %}
-          <tr>
-            <td>{{ row['maxBalance'] }}</td>
-            <td>{{ row['minBalance'] }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <h2>Owned Accounts in Ascending Order By Date</h2>
+      <table>
+        <tr>
+          <th style="border: 1px solid black; padding: 8px">Account ID</th>
+          <th style="border: 1px solid black; padding: 8px">Branch</th>
+          <th style="border: 1px solid black; padding: 8px">Balance</th>
+          <th style="border: 1px solid black; padding: 8px">Opening Date</th>
+        </tr>
+        {% for row in dateOrderQuery %}
+        <tr>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['aid'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['branch'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['balance'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['openDate'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <h2>Accounts with Balance > 50,000 and Opening Date After 2015</h2>
+      <table>
+        <tr>
+          <th style="border: 1px solid black; padding: 8px">Account ID</th>
+          <th style="border: 1px solid black; padding: 8px">Balance</th>
+          <th style="border: 1px solid black; padding: 8px">Opening Date</th>
+        </tr>
+        {% for row in dateAfterHighBalanceQuery %}
+        <tr>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['aid'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['balance'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['openDate'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <h2>Accounts from the Same City</h2>
+      <table>
+        <tr>
+          <th style="border: 1px solid black; padding: 8px">Account ID</th>
+          <th style="border: 1px solid black; padding: 8px">Balance</th>
+        </tr>
+        {% for row in sameCityQuery %}
+        <tr>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['aid'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['balance'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <h2>Minimum and Maximum Balances</h2>
+      <table>
+        <tr>
+          <th style="border: 1px solid black; padding: 8px">Maximum Balance</th>
+          <th style="border: 1px solid black; padding: 8px">Minimum Balance</th>
+        </tr>
+        {% for row in minMaxQuery %}
+        <tr>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['maxBalance'] }}
+          </td>
+          <td style="border: 1px solid black; padding: 8px">
+            {{ row['minBalance'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <form
+      action="{{ url_for('logout') }}"
+      class="logout-form"
+      style="margin: 1vh"
+    >
+      <button minMaxQuery class="btn btn-danger">Log Out</button>
+    </form>
+
+    <form action="{{ url_for('main') }}" style="margin: 1vh">
+      <button class="btn btn-danger" minMaxQuery>Back</button>
+    </form>
   </body>
 </html>
