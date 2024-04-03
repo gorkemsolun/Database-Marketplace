@@ -179,28 +179,28 @@ def accountSummary():
             "SELECT account.aid, account.branch, account.balance, account.openDate FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s ORDER BY account.openDate ASC;",
             [session["userid"]],
         )
-        result1 = cursor.fetchall()
+        dateOrderQuery = cursor.fetchall()
         cursor.execute(
-            "SELECT account.aid, account.balance, account.openDate FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s AND account.balance > 50000 AND account.openDate > '2015-12-31';",
+            "SELECT account.aid, account.balance, account.openDate FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s AND account.openDate > '2015-12-31' AND account.balance > 50000;",
             [session["userid"]],
         )
-        result2 = cursor.fetchall()
+        dateAfterHighBalanceQuery = cursor.fetchall()
         cursor.execute(
             "SELECT account.aid, account.balance FROM owns JOIN account ON owns.aid = account.aid JOIN customer ON owns.cid = customer.cid WHERE owns.cid = %s AND account.city = customer.city;",
             [session["userid"]],
         )
-        result3 = cursor.fetchall()
+        sameCityQuery = cursor.fetchall()
         cursor.execute(
-            "SELECT MAX(account.balance) AS maxBalance, MIN(account.balance) AS minBalance FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s;",
+            "SELECT MIN(account.balance) AS minBalance, MAX(account.balance) AS maxBalance FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s;",
             [session["userid"]],
         )
-        result4 = cursor.fetchall()
+        minMaxQuery = cursor.fetchall()
         return render_template(
             "accountSummary.html",
-            result1=result1,
-            result2=result2,
-            result3=result3,
-            result4=result4,
+            dateOrderQuery=dateOrderQuery,
+            dateAfterHighBalanceQuery=dateAfterHighBalanceQuery,
+            sameCityQuery=sameCityQuery,
+            minMaxQuery=minMaxQuery,
         )
 
     return render_template("login.html")

@@ -28,7 +28,7 @@
             <th>Balance</th>
             <th>Opening Date</th>
           </tr>
-          {% for row in result1 %}
+          {% for row in dateOrderQuery %}
           <tr>
             <td>{{ row['aid'] }}</td>
             <td>{{ row['branch'] }}</td>
@@ -47,7 +47,7 @@
             <th>Balance</th>
             <th>Opening Date</th>
           </tr>
-          {% for row in result2 %}
+          {% for row in dateAfterHighBalanceQuery %}
           <tr>
             <td>{{ row['aid'] }}</td>
             <td>{{ row['balance'] }}</td>
@@ -64,7 +64,7 @@
             <th>Account ID</th>
             <th>Balance</th>
           </tr>
-          {% for row in result3 %}
+          {% for row in sameCityQuery %}
           <tr>
             <td>{{ row['aid'] }}</td>
             <td>{{ row['balance'] }}</td>
@@ -80,7 +80,7 @@
             <th>Max Balance</th>
             <th>Min Balance</th>
           </tr>
-          {% for row in result4 %}
+          {% for row in minMaxQuery %}
           <tr>
             <td>{{ row['maxBalance'] }}</td>
             <td>{{ row['minBalance'] }}</td>

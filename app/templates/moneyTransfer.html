@@ -4,74 +4,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
   <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-pzjw8f+ua6rlWWOj3qFhPSc1n6K/KJQ8e5+Xn3xuJwJlSAwiGgFAW/dAiS6JXm"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
     crossorigin="anonymous"
   />
   <head>
     <title>Money Transfer Page</title>
   </head>
-  <body>
-    <h1>Your Accounts</h1>
-    <form action="{{ url_for('logout') }}">
-      <button>Log Out</button>
-    </form>
-    <table>
-      <thead>
-        <tr>
-          <th>Account ID</th>
-          <th>Branch</th>
-          <th>Balance</th>
-          <th>Open Date</th>
-          <th>City</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for account in userAccounts %}
-        <tr>
-          <td>{{ account['aid'] }}</td>
-          <td>{{ account['branch'] }}</td>
-          <td>{{ account['balance'] }}</td>
-          <td>{{ account['openDate'] }}</td>
-          <td>{{ account['city'] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <body
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    "
+  >
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          margin: 2vh;
+        "
+      >
+        <h2>Your Accounts</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="border: 1px solid black; padding: 8px">Account ID</th>
+              <th style="border: 1px solid black; padding: 8px">Branch</th>
+              <th style="border: 1px solid black; padding: 8px">Balance</th>
+              <th style="border: 1px solid black; padding: 8px">Open Date</th>
+              <th style="border: 1px solid black; padding: 8px">City</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for account in userAccounts %}
+            <tr>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['aid'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['branch'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['balance'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['openDate'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['city'] }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          margin: 2vh;
+        "
+      >
+        <h2>All Accounts</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="border: 1px solid black; padding: 8px">Account ID</th>
+              <th style="border: 1px solid black; padding: 8px">Branch</th>
+              <th style="border: 1px solid black; padding: 8px">Balance</th>
+              <th style="border: 1px solid black; padding: 8px">Open Date</th>
+              <th style="border: 1px solid black; padding: 8px">City</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for account in allAccounts %}
+            <tr>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['aid'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['branch'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['balance'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['openDate'] }}
+              </td>
+              <td style="border: 1px solid black; padding: 8px">
+                {{ account['city'] }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-    <h1>All Accounts</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Account ID</th>
-          <th>Branch</th>
-          <th>Balance</th>
-          <th>Open Date</th>
-          <th>City</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for account in allAccounts %}
-        <tr>
-          <td>{{ account['aid'] }}</td>
-          <td>{{ account['branch'] }}</td>
-          <td>{{ account['balance'] }}</td>
-          <td>{{ account['openDate'] }}</td>
-          <td>{{ account['city'] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="container">
-      <form action="{{ url_for('moneyTransferProcess') }}" method="post">
-        <label for="fromAccountId">From Account ID:</label>
-        <input type="text" id="fromAccountId" name="fromAccountId" required />
-        <label for="toAccountId">To Account ID:</label>
-        <input type="text" id="toAccountId" name="toAccountId" required />
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required />
-        <button type="submit">Transfer</button>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2vh;
+      "
+    >
+      <form
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        "
+        action="{{ url_for('moneyTransferProcess') }}"
+        method="post"
+        class="needs-validation"
+      >
+        <div class="mb-3">
+          <label for="fromAccountId" class="form-label">From Account ID</label>
+          <input
+            type="text"
+            id="fromAccountId"
+            name="fromAccountId"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="toAccountId" class="form-label">To Account ID</label>
+          <input
+            type="text"
+            id="toAccountId"
+            name="toAccountId"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            class="form-control"
+            required
+          />
+        </div>
+        <button class="btn btn-primary" type="submit">Transfer</button>
+      </form>
+
+      <form action="{{ url_for('main') }}" style="margin: 1vh">
+        <button class="btn btn-danger" minMaxQuery>Back</button>
+      </form>
+
+      <form
+        action="{{ url_for('logout') }}"
+        class="logout-form"
+        style="margin: 1vh"
+      >
+        <button minMaxQuery class="btn btn-danger">Log Out</button>
       </form>
     </div>
   </body>

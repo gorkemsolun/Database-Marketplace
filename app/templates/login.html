@@ -4,46 +4,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
   <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-pzjw8f+ua6rlWWOj3qFhPSc1n6K/KJQ8e5+Xn3xuJwJlSAwiGgFAW/dAiS6JXm"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
     crossorigin="anonymous"
   />
   <head>
     <title>Login</title>
   </head>
-  <body>
-    <div class="container">
-      {% if message is defined and message %}
-      <div class="alert">{{ message }}</div>
-      {% endif %}
-      <form action="{{ url_for('login') }}" method="post">
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            name="username"
-            placeholder="Enter username"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+  <body
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    "
+  >
+    {% if message is defined and message %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+    <form
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      "
+      action="{{ url_for('login') }}"
+      method="post"
+    >
+      <div class="form-group" style="margin: 1vh">
+        <label for="username">Username</label>
+        <input
+          type="username"
+          class="form-control"
+          id="username"
+          name="username"
+          placeholder="Enter username"
+        />
+      </div>
+      <div class="form-group" style="margin: 1vh">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin: 1vh">
+        Login
+      </button>
+    </form>
 
-      <form action="{{ url_for('register') }}" method="get">
-        <button>Register</button>
-      </form>
-    </div>
+    <form action="{{ url_for('register') }}" method="get">
+      <button class="btn btn-primary" style="margin: 1vh">Register</button>
+    </form>
   </body>
 </html>
