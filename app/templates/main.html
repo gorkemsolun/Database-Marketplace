@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-pzjw8f+ua6rlWWOj3qFhPSc1n6K/KJQ8e5+Xn3xuJwJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+
+  <head>
+    <title>Main Page</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Account ID</th>
+          <th>Branch</th>
+          <th>Balance</th>
+          <th>Open Date</th>
+          <th>City</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for account in accounts %}
+        <tr>
+          <td>{{ account['aid'] }}</td>
+          <td>{{ account['branch'] }}</td>
+          <td>{{ account['balance'] }}</td>
+          <td>{{ account['openDate'] }}</td>
+          <td>{{ account['city'] }}</td>
+          <td>
+            <a
+              href="{{ url_for('closeAccount', aid=account['aid']) }}"
+              class="btn btn-danger"
+              >Close Account</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <form action="{{ url_for('moneyTransfer') }}">
+      <button class="btn">Money Transfer</button>
+    </form>
+    <form action="{{ url_for('accountSummary') }}">
+      <button class="btn">Account Summary</button>
+    </form>
+    <form action="{{ url_for('logout') }}">
+      <button class="btn">Log Out</button>
+    </form>
+  </body>
+</html>

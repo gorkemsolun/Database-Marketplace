@@ -41,7 +41,7 @@ def login():
             session["userid"] = user["cid"]
             session["username"] = user["name"]
             message = "Logged in successfully!"
-            return redirect(url_for("main_page"))
+            return redirect(url_for("main"))
         else:
             message = "Please enter correct email / password !"
     return render_template("login.html", message=message)
@@ -81,28 +81,137 @@ def register():
 
 
 @app.route("/main")
-def main_page():
-    return "Main page"
+def main():
+
+    if session["loggedin"]:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            "SELECT account.aid, branch, balance, openDate, city FROM account, owns WHERE owns.aid = account.aid AND cid = %s",
+            [session["userid"]],
+        )
+        accounts = cursor.fetchall()
+        return render_template("main.html", accounts=accounts)
+    return render_template("login.html")
 
 
-@app.route("/money_transfer", methods=["GET", "POST"])
-def money_transfer():
-    return "Money transfer"
+@app.route("/moneyTransfer")
+def moneyTransfer():
+
+    if session["loggedin"]:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            "SELECT account.aid, branch, balance, openDate, city FROM account, owns WHERE owns.aid = account.aid AND cid = %s",
+            [session["userid"]],
+        )
+        userAccounts = cursor.fetchall()
+        cursor.execute("SELECT * FROM account")
+        allAccounts = cursor.fetchall()
+        return render_template(
+            "moneyTransfer.html",
+            userAccounts=userAccounts,
+            allAccounts=allAccounts,
+        )
+
+    return render_template("login.html")
 
 
-@app.route("/close_account/<aid>", methods=["GET", "POST"])
-def close_account(aid):
-    return "Close account"
+@app.route("/moneyTransferProcess", methods=["GET", "POST"])
+def moneyTransferProcess():
+    fromAid = request.form["fromAccountId"]
+    toAid = request.form["toAccountId"]
+    amount = float(request.form["amount"])
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        "SELECT account.aid, branch, balance, openDate, city FROM account, owns WHERE owns.aid = account.aid AND cid = %s AND account.aid = %s",
+        [session["userid"], fromAid],
+    )
+    fromAccount = cursor.fetchone()
+
+    if fromAccount is None:
+        return render_template(
+            "error.html",
+            message="There is no account associated with that ID. Please go back and try again with a valid account ID that belongs to you.",
+        )
+
+    cursor.execute(
+        "SELECT aid, branch, balance, openDate, city FROM account WHERE aid = %s",
+        [toAid],
+    )
+    toAccount = cursor.fetchone()
+    if toAccount is None:
+        return render_template(
+            "error.html",
+            message="There is no account associated with that ID. Please go back and try again with a valid account ID.",
+        )
+
+    if fromAccount["balance"] < amount:
+        return render_template(
+            "error.html",
+            message="You do not have enough balance to make this transfer. Please go back and try again with a lower amount.",
+        )
+
+    cursor.execute(
+        "UPDATE account SET balance = balance - %s WHERE aid = %s", [amount, fromAid]
+    )
+    cursor.execute(
+        "UPDATE account SET balance = balance + %s WHERE aid = %s", [amount, toAid]
+    )
+    mysql.connection.commit()
+
+    return redirect(url_for("moneyTransfer"))
 
 
-@app.route("/account_summary")
-def account_summary():
-    return "Account summary"
+@app.route("/closeAccount/<aid>", methods=["GET", "POST"])
+def closeAccount(aid):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("DELETE FROM owns WHERE aid = %s", [aid])
+    cursor.execute("DELETE FROM account WHERE aid = %s", [aid])
+    mysql.connection.commit()
+    return redirect(url_for("main"))
+
+
+@app.route("/accountSummary")
+def accountSummary():
+
+    if session["loggedin"]:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            "SELECT account.aid, account.branch, account.balance, account.openDate FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s ORDER BY account.openDate ASC;",
+            [session["userid"]],
+        )
+        result1 = cursor.fetchall()
+        cursor.execute(
+            "SELECT account.aid, account.balance, account.openDate FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s AND account.balance > 50000 AND account.openDate > '2015-12-31';",
+            [session["userid"]],
+        )
+        result2 = cursor.fetchall()
+        cursor.execute(
+            "SELECT account.aid, account.balance FROM owns JOIN account ON owns.aid = account.aid JOIN customer ON owns.cid = customer.cid WHERE owns.cid = %s AND account.city = customer.city;",
+            [session["userid"]],
+        )
+        result3 = cursor.fetchall()
+        cursor.execute(
+            "SELECT MAX(account.balance) AS maxBalance, MIN(account.balance) AS minBalance FROM owns JOIN account ON owns.aid = account.aid WHERE owns.cid = %s;",
+            [session["userid"]],
+        )
+        result4 = cursor.fetchall()
+        return render_template(
+            "accountSummary.html",
+            result1=result1,
+            result2=result2,
+            result3=result3,
+            result4=result4,
+        )
+
+    return render_template("login.html")
 
 
 @app.route("/logout")
 def logout():
-    return "Logout"
+    session["loggedin"] = False
+    session["userid"] = None
+    session["username"] = None
+    return render_template("login.html")
 
 
 if __name__ == "__main__":
