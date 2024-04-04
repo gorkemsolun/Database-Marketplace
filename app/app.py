@@ -60,8 +60,16 @@ def register():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT * FROM customer WHERE name = % s", (username,))
         account = cursor.fetchone()
+        cursor.execute("SELECT * FROM customer WHERE cid = % s", (password,))
+        accountPassword = cursor.fetchone()
         if account:
             message = "Choose a different username!"
+
+        elif accountPassword:
+            message = "Choose a different password(cid)!"
+
+        elif len(password) != 5:
+            message = "Password must be 5 characters!"
 
         elif not username or not password:
             message = "Please fill out the form!"
