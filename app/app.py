@@ -90,7 +90,6 @@ def register():
 
 @app.route("/main")
 def main():
-
     if session["loggedin"]:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
@@ -156,6 +155,13 @@ def moneyTransferProcess():
             isPositive=False,
         )
 
+    if fromAid == toAid:
+        return render_template(
+            "message.html",
+            message="You cannot transfer money to the same account. Please go back and try again with a different account ID.",
+            isPositive=False,
+        )
+
     if fromAccount["balance"] < amount:
         return render_template(
             "message.html",
@@ -185,7 +191,11 @@ def closeAccount(aid):
     cursor.execute("DELETE FROM owns WHERE aid = %s", [aid])
     cursor.execute("DELETE FROM account WHERE aid = %s", [aid])
     mysql.connection.commit()
-    return redirect(url_for("main"))
+    return render_template(
+        "message.html",
+        message="You have successfully closed the account with ID %s." % aid,
+        isPositive=True,
+    )
 
 
 @app.route("/accountSummary")
